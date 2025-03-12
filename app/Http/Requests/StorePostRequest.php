@@ -26,7 +26,9 @@ class StorePostRequest extends FormRequest
         return [
             'title'=>['required','min:3',Rule::unique('posts')->ignore($this->post)], //Ignore the uniquness in-case-of updating without changing the title 
             'description' => ['required','min:10'],
-            'post_creator' =>['required',Rule::exists('users', 'id')] // Ensure the user ID exists in the users table
+            'post_creator' =>['required',Rule::exists('users', 'id')],
+            'image' => ['mimes:jpg,png'],
+            // Ensure the user ID exists in the users table
 
         ];
     }

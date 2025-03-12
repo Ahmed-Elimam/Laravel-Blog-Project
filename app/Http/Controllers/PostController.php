@@ -5,6 +5,8 @@ use App\Models\post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\Storage;
+
 class PostController extends Controller
 {
     public function index(){
@@ -32,13 +34,12 @@ class PostController extends Controller
         $title = request()->title;
         $description = request()->description;
         $postCreator = request()->post_creator;
-        // dd($postCreator,$title,$description);
-        // $post = new Post;
-        // $post->Title = $title;
-        // $post->description = $description;
-        // $post->user_id = $postCreator;
-        // $post->save();
-        $post = Post::create(['title'=> $title,'description'=> $description,'user_id'=> $postCreator]);
+        $image = null;
+        if($request->hasFile('image'))
+        {
+        $image = request()->file('image')->store('image','public');
+        }
+        $post = Post::create(['title'=> $title,'description'=> $description,'user_id'=> $postCreator,'image' => $image ?? null]);
         return to_route('posts.index', $post->id);
     }
 
@@ -53,12 +54,31 @@ public function update(StorePostRequest $request, $id){
     $description = request()->description;
     $postCreator = request()->post_creator;
     $post = Post::find($id);
-    $post->update(['title'=> $title,'description'=> $description,'user_id'=> $postCreator]);
+    $image = $post->image;
+    if ($request->has('remove_image')) // Check if the remove_image checkbox is checked
+    {     
+        if ($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
+        $image = null;
+    }
+    if ($request->hasFile('image')) {  // If a new image is uploaded, replace the old one
+        // Delete old image if exists
+        if ($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
+        // Store new image
+        $image = $request->file('image')->store('posts', 'public');
+    }
+    $post->update(['title'=> $title,'description'=> $description,'user_id'=> $postCreator,'image'=> $image]);
     return to_route('posts.index');
 }
 
 public function destroy($id){
     $post = Post::find($id);
+    if ($post->image) {
+        Storage::disk('public')->delete($post->image);
+    }
     $post->delete();
     return to_route('posts.index');
 }

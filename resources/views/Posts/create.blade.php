@@ -26,7 +26,7 @@
             </div>
             
             <div class="px-6 py-4">
-                <form method="POST" action="{{ $post ? route('posts.update', $post['id']) : route('posts.store') }}">
+                <form method="POST" action="{{ $post ? route('posts.update', $post['id']) : route('posts.store') }}" enctype="multipart/form-data">
                     @csrf
                     @if($post)
                         @method('PUT')
@@ -67,6 +67,22 @@
                         @endforeach
                     </select>
                     </div>
+
+                    <!-- image upload -->
+                    <div class="mb-4">
+                        <label for="image" class="block">Image</label>
+                        <input
+                            name="image"
+                            type="file"
+                            class="border rounded p-2">
+                    </div>
+                    @if ($post && $post->image)
+                        <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" class="w-32 h-32">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="remove_image" value="1">
+                            <span>Remove Image</span>
+                        </label>
+                    @endif
 
                     <!-- Submit Button -->
                     <div class="flex justify-end">

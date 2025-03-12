@@ -15,6 +15,7 @@
                             <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Posted By</th>
                             <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Created At</th>
                             <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Slug</th>
+                            <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Image</th>
                             <th class="px-4 py-2 font-medium whitespace-nowrap text-gray-900">Actions</th>
                         </tr>
                     </thead>
@@ -26,6 +27,7 @@
                             <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ $post->user ? $post->user->name : "No User Found" }}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{ $post->created_at->format('d M Y') }}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-gray-700">{{$post->slug}}</td>
+                            <td class="px-4 py-2 whitespace-nowrap">{!! $post->image ? '<img src="' . asset('storage/' . $post->image) . '" alt="Post Image" class="w-16 h-16 object-cover rounded">' : 'No Image' !!}</td>
                             <td class="px-4 py-2 whitespace-nowrap text-gray-700 space-x-2">
                                 <a href="{{ route('posts.show', $post->id) }}" class="inline-block px-4 py-1 text-xs font-medium text-white bg-blue-400 rounded hover:bg-blue-500">View</a>
                                 <a href="{{ route('posts.edit', $post->id) }}" class="inline-block bg-indigo-500 text-white px-3 py-1 rounded hover:bg-indigo-600">Edit</a>
