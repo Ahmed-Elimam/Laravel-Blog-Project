@@ -34,5 +34,4 @@ Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.upda
 
 Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
 
-
-
+Route::get('/posts/{id}/ajax', [PostController::class, 'ajaxShow'])->name('posts.ajaxShow');

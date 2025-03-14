@@ -82,5 +82,10 @@ public function destroy($id){
     $post->delete();
     return to_route('posts.index');
 }
+public function ajaxShow($id)
+{
+    $post = Post::findOrFail($id);
+    return response()->json($post);
+}
 
 }
