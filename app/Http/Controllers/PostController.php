@@ -6,11 +6,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
     public function index(){
-        $posts = Post::paginate(8); //Select * from posts limit 8 by 8 (pagination)
+        
+        $posts = Post::with('user')->paginate(8); //Select * from posts limit 8 by 8 (pagination) with user relation
+       
+        
         // $phpPosts = post::where('title','=','PHP')->get();//get()=>end of where condition
         // dd($posts, $phpPosts);//output is collection object
         return view('Posts.index',['posts' => $posts]);
